@@ -1,0 +1,12 @@
+@model WebApplication1.Models.Liga
+
+<h2>Clubes da @Model.Nome</h2>
+
+<ul>
+    @foreach(var clube in Model.Clubes)
+    {
+        <li>
+            <a href="/Loja/Produtos?clubeId=@clube.Id">@clube.Nome</a>
+        </li>
+    }
+</ul>

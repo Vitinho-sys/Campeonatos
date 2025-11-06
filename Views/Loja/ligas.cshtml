@@ -1,0 +1,9 @@
+@model List<WebApplication1.Models.Liga>
+
+<h1>Ligas</h1>
+<ul>
+@foreach(var liga in Model)
+{
+    <li><a href="@Url.Action("Clubes", "Loja", new { ligaId = liga.Id })">@liga.Nome</a></li>
+}
+</ul>

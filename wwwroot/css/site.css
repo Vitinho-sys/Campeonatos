@@ -29,3 +29,32 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.liga-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.liga-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 220px;
+    padding: 15px;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.liga-card:hover {
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+.liga-card img {
+    max-width: 100%;
+    border-radius: 10px;
+    height: 130px;
+    object-fit: cover;
+}
+.liga-card h2 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+}

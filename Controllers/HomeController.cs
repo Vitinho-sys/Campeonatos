@@ -1,24 +1,21 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
-
-namespace WebApplication1.Controllers;
+using System.Collections.Generic;
 
 public class HomeController : Controller
 {
+    private List<Liga> ObterLigas()
+    {
+        return new List<Liga>
+        {
+            new Liga { Id = 1, Nome = "Premier League", Clubes = new List<Clube>() },
+            new Liga { Id = 2, Nome = "La Liga", Clubes = new List<Clube>() }
+        };
+    }
+
     public IActionResult Index()
     {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        var ligas = ObterLigas();
+        return View(ligas); // <- É importante passar o Model para a View
     }
 }
