@@ -21,7 +21,55 @@ namespace WebApplication1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApplication1.Models.Produto", b =>
+            modelBuilder.Entity("WebApplication1.Models.Clube", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LigaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LigaId");
+
+                    b.ToTable("Clubes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            LigaId = 1,
+                            Nome = "Flamengo"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            LigaId = 1,
+                            Nome = "Palmeiras"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            LigaId = 2,
+                            Nome = "Real Madrid"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            LigaId = 2,
+                            Nome = "Manchester City"
+                        });
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Liga", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,12 +81,125 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Ligas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nome = "Campeonato Brasileiro"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nome = "Champions League"
+                        });
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Produto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClubeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagemUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Preco")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClubeId");
+
                     b.ToTable("Produtos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClubeId = 1,
+                            Descricao = "Camisa oficial do Flamengo - modelo 2025",
+                            ImagemUrl = "/imagens/flamengo.jpg",
+                            Nome = "Camisa Flamengo 2025",
+                            Preco = 349.90m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClubeId = 2,
+                            Descricao = "Camisa oficial do Palmeiras - modelo 2025",
+                            ImagemUrl = "/imagens/palmeiras.jpg",
+                            Nome = "Camisa Palmeiras 2025",
+                            Preco = 339.90m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClubeId = 3,
+                            Descricao = "Camisa oficial do Real Madrid - modelo 2025",
+                            ImagemUrl = "/imagens/realmadrid.jpg",
+                            Nome = "Camisa Real Madrid 2025",
+                            Preco = 399.90m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClubeId = 4,
+                            Descricao = "Camisa oficial do Manchester City - modelo 2025",
+                            ImagemUrl = "/imagens/mancity.jpg",
+                            Nome = "Camisa Manchester City 2025",
+                            Preco = 379.90m
+                        });
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Clube", b =>
+                {
+                    b.HasOne("WebApplication1.Models.Liga", "Liga")
+                        .WithMany("Clubes")
+                        .HasForeignKey("LigaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Liga");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Produto", b =>
+                {
+                    b.HasOne("WebApplication1.Models.Clube", "Clube")
+                        .WithMany("Produtos")
+                        .HasForeignKey("ClubeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clube");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Clube", b =>
+                {
+                    b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Liga", b =>
+                {
+                    b.Navigation("Clubes");
                 });
 #pragma warning restore 612, 618
         }

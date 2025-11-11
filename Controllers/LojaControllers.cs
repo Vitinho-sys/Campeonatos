@@ -1,68 +1,56 @@
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 
 namespace WebApplication1.Controllers
 {
     public class LojaController : Controller
     {
-        private List<Liga> ObterLigas()
+        private readonly AppDbContext _context;
+
+        public LojaController(AppDbContext context)
         {
-            return new List<Liga>
-            {
-                new Liga
-                {
-                    Id = 1,
-                    Nome = "Premier League",
-                    Clubes = new List<Clube>
-                    {
-                        new Clube
-                        {
-                            Id = 1,
-                            Nome = "Manchester United",
-                            Produtos = new List<Produto>
-                            {
-                                new Produto { Id = 1, Nome="Camisa Oficial 2025", Descricao="Camisa oficial do Manchester United 2025", Preco=299.90M, ImagemUrl="manu2025.jpg" },
-                                new Produto { Id = 2, Nome="Camisa Treino", Descricao="Camisa de treino oficial", Preco=199.90M, ImagemUrl="manutreino.jpg" }
-                            }
-                        },
-                        new Clube
-                        {
-                            Id = 2,
-                            Nome = "Liverpool",
-                            Produtos = new List<Produto>
-                            {
-                                new Produto { Id = 3, Nome="Camisa Oficial 2025", Descricao="Camisa oficial do Liverpool 2025", Preco=289.90M, ImagemUrl="liverpool2025.jpg" }
-                            }
-                        }
-                    }
-                },
-                new Liga { Id=2, Nome="La Liga", Clubes = new List<Clube>() }
-            };
+            _context = context;
         }
 
-        public IActionResult Ligas()
+        // ✅ Ação para exibir todas as ligas
+        public async Task<IActionResult> Ligas()
         {
-            var ligas = ObterLigas();
-            return View(ligas);
+            var ligas = await _context.Ligas.ToListAsync();
+            Console.WriteLine($"✅ Ligas encontradas: {ligas.Count}");
+            return View(ligas); // Renderiza Views/Loja/Ligas.cshtml
         }
 
-        public IActionResult Clubes(int ligaId)
+        // ✅ Exibir clubes de uma liga
+        public async Task<IActionResult> Clubes(int ligaId)
         {
-            var liga = ObterLigas().Find(l => l.Id == ligaId);
-            if(liga == null) return NotFound();
-            return View(liga);
+            var clubes = await _context.Clubes
+                .Include(c => c.Liga)
+                .Where(c => c.LigaId == ligaId)
+                .ToListAsync();
+
+                var liga = await _context.Ligas.FindAsync(ligaId);
+                ViewBag.LigaNome = liga?.Nome ?? "Liga";
+
+            return View(clubes); // Renderiza Views/Loja/Clubes.cshtml
         }
 
-        public IActionResult Produtos(int clubeId)
+        // ✅ Exibe produtos (camisetas) por clube
+        public async Task<IActionResult> Produtos(int clubeId)
         {
-            var clubes = new List<Clube>();
-            foreach(var liga in ObterLigas())
-                clubes.AddRange(liga.Clubes);  // garante que é List<Clube> do mesmo namespace
+            var produtos = await _context.Produtos
+                .Include(p => p.Clube)
+                .Where(p => p.ClubeId == clubeId)
+                .ToListAsync();
 
-            var clube = clubes.Find(c => c.Id == clubeId);
-            if(clube == null) return NotFound();
-            return View(clube);
+            var clube = await _context.Clubes
+                .Include(c => c.Liga)
+                .FirstOrDefaultAsync(c => c.Id == clubeId);
+
+            ViewBag.ClubeNome = clube?.Nome ?? "Clube";
+            ViewBag.LigaNome = clube?.Liga?.Nome ?? "";
+
+            return View("Produtos", produtos);
         }
     }
 }

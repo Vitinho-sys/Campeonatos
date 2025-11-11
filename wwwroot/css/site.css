@@ -18,43 +18,82 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+        background-color: #0d0d0d;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Hero Section */
+    .hero {
+        background: url('/img/premium/hero-bg.jpg') center/cover no-repeat;
+        height: 75vh;
+        position: relative;
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+        z-index: 0;
+    }
+
+    .hero div {
+        z-index: 1;
+        position: relative;
+    }
+
+    /* Cores premium */
+    .text-accent {
+        color: #d4af37; /* dourado */
+    }
+
+    .btn-accent {
+        background-color: #d4af37;
+        color: #000;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-accent:hover {
+        background-color: #b9972a;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    /* Liga Cards */
+    .liga-card {
+        transition: all 0.3s ease;
+    }
+
+    .liga-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 0 15px rgba(212,175,55,0.4);
+    }
+
+    .border-accent {
+        border-color: #d4af37 !important;
+    }
+
+    /* Carrossel */
+   .premium-carousel {
+    max-width: 600px; /* largura máxima total */
+    margin: 2rem auto; /* centraliza e reduz espaço vertical */
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Ajusta a altura das imagens */
+.premium-carousel img {
+    height: 250px; /* altura reduzida */
+    object-fit: cover; /* mantém proporção e corta o excesso */
+    border-radius: 1rem;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
-}
-
-.liga-container {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-.liga-card {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 220px;
-    padding: 15px;
-    text-align: center;
-    transition: box-shadow 0.3s ease;
-    cursor: pointer;
-}
-.liga-card:hover {
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
-}
-.liga-card img {
-    max-width: 100%;
-    border-radius: 10px;
-    height: 130px;
-    object-fit: cover;
-}
-.liga-card h2 {
-    margin-top: 10px;
-    font-size: 1.2rem;
+/* Responsivo para telas menores */
+@media (max-width: 576px) {
+    .premium-carousel {
+        max-width: 100%;
+        margin: 1rem auto;
+    }
+    .premium-carousel img {
+        height: 180px;
+    }
 }

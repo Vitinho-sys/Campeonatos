@@ -1,12 +1,86 @@
-@model WebApplication1.Models.Liga
+@model List<WebApplication1.Models.Clube>
 
-<h2>Clubes da @Model.Nome</h2>
-
-<ul>
-    @foreach(var clube in Model.Clubes)
-    {
-        <li>
-            <a href="/Loja/Produtos?clubeId=@clube.Id">@clube.Nome</a>
-        </li>
+<style>
+    body {
+        background: radial-gradient(circle at top, #111 0%, #000 100%);
+        color: #fff;
     }
-</ul>
+
+    .titulo-liga {
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        background: linear-gradient(90deg, #fff, #999);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .clube-card {
+        background: linear-gradient(145deg, #1b1b1b, #0e0e0e);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+
+    .clube-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
+        border-color: #999;
+    }
+
+    .clube-card img {
+        height: 130px;
+        object-fit: contain;
+        background: #222;
+        border-radius: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    .btn-accent {
+        background: linear-gradient(90deg, #fff 0%, #ccc 100%);
+        color: #000;
+        font-weight: bold;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-accent:hover {
+        background: linear-gradient(90deg, #ccc 0%, #fff 100%);
+        transform: scale(1.05);
+    }
+</style>
+
+<section class="container py-5">
+    <h2 class="text-center fw-bold mb-5 titulo-liga">
+        Clubes da <span class="text-accent">@ViewBag.LigaNome</span>
+    </h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row g-4 justify-content-center">
+            @foreach (var clube in Model)
+            {
+                <div class="col-6 col-md-4 col-lg-3 d-flex">
+                    <div class="clube-card w-100 text-center p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <img src="@Url.Content($"~/img/clubes/{clube.Nome.ToLower().Replace(" ", "")}.png")" 
+                                 class="img-fluid mb-3 border border-1 border-light-subtle"
+                                 alt="@clube.Nome" />
+                            <h5 class="fw-bold mt-2">@clube.Nome</h5>
+                        </div>
+                        <a href="@Url.Action("Produtos", "Loja", new { clubeId = clube.Id })"
+                           class="btn btn-accent btn-sm mt-3 rounded-pill px-4 py-2 shadow-sm">
+                            Ver Camisas
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>  
+    }
+    else
+    {
+        <p class="text-center text-muted mt-5">Nenhum clube disponível nesta liga.</p>
+    }
+</section>
+    

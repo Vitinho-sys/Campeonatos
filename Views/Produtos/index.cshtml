@@ -1,0 +1,21 @@
+@model IEnumerable<WebApplication1.Models.Produto>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Produtos VK Mantos</h2>
+    <div class="row">
+        @foreach (var produto in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-lg rounded-4">
+                    <img src="@produto.ImagemUrl" class="card-img-top rounded-top-4" alt="@produto.Nome">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@produto.Nome</h5>
+                        <p class="card-text text-muted">@produto.Descricao</p>
+                        <p class="fw-bold text-accent">@produto.Preco.ToString("C")</p>
+                        <small class="text-secondary">Clube: @produto.Clube?.Nome</small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

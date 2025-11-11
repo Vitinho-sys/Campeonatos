@@ -1,9 +1,32 @@
 @model List<WebApplication1.Models.Liga>
 
-<h1>Ligas</h1>
-<ul>
-@foreach(var liga in Model)
-{
-    <li><a href="@Url.Action("Clubes", "Loja", new { ligaId = liga.Id })">@liga.Nome</a></li>
-}
-</ul>
+<section class="container py-5">
+    <h2 class="text-center fw-bold mb-4 text-light">
+        Escolha sua <span class="text-accent">Liga Favorita</span>
+    </h2>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row g-4 justify-content-center">
+            @foreach (var liga in Model)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="liga-card text-center p-3 rounded-4 bg-dark text-light border border-secondary-subtle">
+                        <img src="@Url.Content($"~/img/ligas/{liga.Nome.ToLower().Replace(" ", "")}.jpg")" 
+                             class="img-fluid rounded-3 mb-3 border border-2 border-accent"
+                             alt="@liga.Nome" />
+                        <h5 class="fw-bold">@liga.Nome</h5>
+                        <a href="@Url.Action("Clubes", "Loja", new { ligaId = liga.Id })"
+                           class="btn btn-accent btn-sm mt-2 rounded-pill px-3">
+                            Ver Clubes
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-muted">Nenhuma liga disponível no momento.</p>
+    }
+</section>

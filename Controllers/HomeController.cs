@@ -1,21 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 
-public class HomeController : Controller
+namespace WebApplication1.Controllers
 {
-    private List<Liga> ObterLigas()
+    public class HomeController : Controller
     {
-        return new List<Liga>
-        {
-            new Liga { Id = 1, Nome = "Premier League", Clubes = new List<Clube>() },
-            new Liga { Id = 2, Nome = "La Liga", Clubes = new List<Clube>() }
-        };
-    }
+        private readonly AppDbContext _context;
 
-    public IActionResult Index()
-    {
-        var ligas = ObterLigas();
-        return View(ligas); // <- É importante passar o Model para a View
+        public HomeController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var ligas = await _context.Ligas.ToListAsync();
+
+            Console.WriteLine($"✅ Ligas encontradas no banco: {ligas.Count}");
+            return View(ligas);
+        }
     }
 }
